@@ -313,6 +313,7 @@ class EditableState extends State<Editable> {
 
   ///Create a row after the last row
   createRow() => addOneRow(columns, rows);
+  setRowValue(String key, int index, value) => editedRows[index][key] = value;
   EditableState({this.rows, this.columns, this.columnCount, this.rowCount});
 
   /// Temporarily holds all edited rows
@@ -444,12 +445,6 @@ class EditableState extends State<Editable> {
                     stripeColor1: widget.stripeColor1,
                     stripeColor2: widget.stripeColor2,
                     onChanged: (value) {
-                      if(widget.onChanged != null) {
-                        List editedRow = editedRows.where((element) {
-                          return element['row'] == index;
-                        }).toList();
-                        widget.onChanged!(editedRow, index);
-                      }
                       ///checks if row has been edited previously
                       var result = editedRows.indexWhere((element) {
                         return element['row'] != index ? false : true;
@@ -463,6 +458,13 @@ class EditableState extends State<Editable> {
                         temp['row'] = index;
                         temp[ckeys[rowIndex]] = value;
                         editedRows.add(temp);
+                      }
+
+                      if(widget.onChanged != null) {
+                        List editedRow = editedRows.where((element) {
+                          return element['row'] == index;
+                        }).toList();
+                        widget.onChanged!(editedRow, index);
                       }
                     },
                   );
