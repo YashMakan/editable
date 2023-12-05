@@ -50,6 +50,7 @@ class Editable extends StatefulWidget {
       this.rows,
       this.columnRatio = 0.20,
       this.onSubmitted,
+      this.onChanged,
       this.onRowSaved,
       this.columnCount = 0,
       this.rowCount = 0,
@@ -288,6 +289,8 @@ class Editable extends StatefulWidget {
   /// it returns a value of the cell data
   final ValueChanged<String>? onSubmitted;
 
+  final Function(List<dynamic>, int)? onChanged;
+
   /// [onRowSaved] callback is triggered when a [saveButton] is pressed.
   /// returns only values if row is edited, otherwise returns a string ['no edit']
   final ValueChanged<dynamic>? onRowSaved;
@@ -441,6 +444,12 @@ class EditableState extends State<Editable> {
                     stripeColor1: widget.stripeColor1,
                     stripeColor2: widget.stripeColor2,
                     onChanged: (value) {
+                      if(widget.onChanged != null) {
+                        List editedRow = editedRows.where((element) {
+                          return element['row'] == index;
+                        }).toList();
+                        widget.onChanged!(editedRow, index);
+                      }
                       ///checks if row has been edited previously
                       var result = editedRows.indexWhere((element) {
                         return element['row'] != index ? false : true;
