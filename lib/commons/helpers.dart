@@ -27,7 +27,11 @@ rowBlueprint(int rowCount, columns, rows) {
 addOneRow(columns, rows) {
   var item = {};
   columns.forEach((element) {
-    item[element['key']] = '';
+    if(item[element['default']] != null) {
+      item[element['key']] = element['default'];
+    } else {
+      item[element['key']] = '';
+    }
   });
   rows.add(item);
   return rows;
